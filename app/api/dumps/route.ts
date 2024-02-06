@@ -35,6 +35,6 @@ export async function GET(req:Request)
 
     } catch (error) {
         console.log(error)
-        return NextResponse.json("server Error")
+        return NextResponse.json(error)
     }
 }
