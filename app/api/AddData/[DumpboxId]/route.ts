@@ -3,6 +3,8 @@ import prisma from "@/libs/prismadb";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/authOptions";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(
   req: Request,
   { params }: { params: { DumpboxId: string } }
