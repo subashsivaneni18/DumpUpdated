@@ -8,19 +8,23 @@ import { useSession } from "next-auth/react"
 import { redirect } from "next/navigation"
 import useSWR from "swr"
 
-
+export const dynamic = "force-static";
 
 const Page = () => {
 
 
   const {status} = useSession()
-
   
 
   const {data:currentUserDupms=[]} = useSWR('/api/dumps',fetcher)
 
   if (status === "unauthenticated") {
     return redirect("/");
+  }
+
+  if(status==='loading')
+  {
+    return <p>Loading</p>
   }
     
   return (
