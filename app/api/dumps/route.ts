@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth"
-import { authOptions } from "../auth/[...nextauth]/route"
+import { authOptions } from "@/libs/authOptions"
 import { NextResponse } from "next/server"
 import prisma from '@/libs/prismadb'
 export async function GET(req:Request)
@@ -35,5 +35,6 @@ export async function GET(req:Request)
 
     } catch (error) {
         console.log(error)
+        return NextResponse.json("server Error")
     }
 }
