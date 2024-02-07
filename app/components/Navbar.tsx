@@ -9,7 +9,7 @@ import axios from "axios";
 import DumpCreateModal from "./DumpCreateModal";
 import useSWR from "swr";
 import fetcher from "@/libs/fetcher";
-import { User } from "@prisma/client";
+
 
 interface NavbarProps{
   DumpBoxId?:string
@@ -107,7 +107,7 @@ const Navbar:React.FC<NavbarProps> = ({
     }
   }, [ DumpboxId, toast,mutateImages,mutateDumpBox]);
 
-  const {data:currentUser} = useSWR<User>('/api/current',fetcher)
+  
 
 
 
@@ -129,11 +129,7 @@ const Navbar:React.FC<NavbarProps> = ({
 
         {isDashboard && <DumpCreateModal />}
 
-        {isDashboard && (
-          <div className="cursor-pointer" onClick={()=>router.push(`/profile/${currentUser?.id}`)}>
-            <Avatar src={currentUser?.image || ""} />
-          </div>
-        )}
+        
 
        
       </div>

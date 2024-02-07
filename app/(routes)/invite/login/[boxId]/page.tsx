@@ -33,7 +33,7 @@ const Page = ({params}:{params:{boxId:string}}) => {
   return (
     <div className="relative">
       <Navbar />
-      <div className="absolute top-[100px]">
+      <div className="absolute top-[100px] w-[100vw] h-[80vh] flex justify-center items-center gap-40">
         <InviteLoginModal/>
         <RegisterModal isInvitation />
       </div>

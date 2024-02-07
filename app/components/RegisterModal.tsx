@@ -116,7 +116,7 @@ const RegisterModal:React.FC<RegisterModalProps> = ({
 
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={() => handleRegister()}>
-              Login
+              Register
             </Button>
           </ModalFooter>
         </ModalContent>

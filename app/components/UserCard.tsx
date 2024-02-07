@@ -5,6 +5,7 @@ import { User } from '@prisma/client';
 import axios from 'axios';
 import useSWR from 'swr';
 import fetcher from '@/libs/fetcher';
+import { useRouter } from 'next/navigation';
 
 
 interface UserCardProps{
@@ -18,6 +19,9 @@ const UserCard:React.FC<UserCardProps> = ({
 }) => {
 
   const toast = useToast()
+  const router = useRouter()
+
+  const {mutate:mutateBox} = useSWR(`/api/dumpbox/${boxId}`,fetcher)
 
   const handleDelete = useCallback(async()=>{
     try {
@@ -28,6 +32,8 @@ const UserCard:React.FC<UserCardProps> = ({
         duration: 9000,
         isClosable: true,
       });
+      mutateBox()
+      router.refresh()
     } catch (error) {
       console.log(error)
       toast({
@@ -37,7 +43,7 @@ const UserCard:React.FC<UserCardProps> = ({
         isClosable: true,
       });
     }
-  },[toast,boxId,user?.id])
+  },[toast,boxId,user?.id,mutateBox,router])
 
 
   const handleAcessChange = useCallback(async()=>{
