@@ -1,13 +1,12 @@
-// Import statements
+"use client"
 import React, { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
-import { Button,  Text, useToast } from "@chakra-ui/react";
+import { Avatar, Button,  Text, useToast } from "@chakra-ui/react";
 import { signOut, useSession } from "next-auth/react";
 import axios from "axios";
 import DumpCreateModal from "./DumpCreateModal";
-import { UploadButton } from "@/libs/uploadthing";
 import useSWR from "swr";
 import fetcher from "@/libs/fetcher";
 import { User } from "@prisma/client";
@@ -16,7 +15,7 @@ interface NavbarProps{
   DumpBoxId?:string
 }
 
-// Navbar component
+
 const Navbar:React.FC<NavbarProps> = ({
   DumpBoxId
 }) => {
@@ -108,6 +107,8 @@ const Navbar:React.FC<NavbarProps> = ({
     }
   }, [ DumpboxId, toast,mutateImages,mutateDumpBox]);
 
+  const {data:currentUser} = useSWR<User>('/api/current',fetcher)
+
 
 
 
@@ -127,6 +128,12 @@ const Navbar:React.FC<NavbarProps> = ({
         )}
 
         {isDashboard && <DumpCreateModal />}
+
+        {isDashboard && (
+          <div className="cursor-pointer" onClick={()=>router.push(`/profile/${currentUser?.id}`)}>
+            <Avatar src={currentUser?.image || ""} />
+          </div>
+        )}
 
        
       </div>

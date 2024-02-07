@@ -36,7 +36,7 @@ export async function POST(
         AdminsIds:{
           has:currentUser?.id as string
         }
-      },
+      }
       
     })
 

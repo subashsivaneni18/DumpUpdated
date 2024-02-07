@@ -17,6 +17,8 @@ import {
   useToast
 } from "@chakra-ui/react";
 import axios from 'axios';
+import useSWR from 'swr';
+import fetcher from '@/libs/fetcher';
 
 const DumpCreateModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -24,6 +26,8 @@ const DumpCreateModal = () => {
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
   const toast = useToast()
+
+  const {mutate:mutateDumps}  =useSWR('/api/dumps',fetcher)
 
   
   const handleCreation = useCallback(async () => {
@@ -36,6 +40,7 @@ const DumpCreateModal = () => {
         isClosable: true,
       });
       onClose()
+      mutateDumps()
     } catch (error) {
       console.log(error);
       toast({
@@ -48,7 +53,7 @@ const DumpCreateModal = () => {
     }finally{
         setName('')
     }
-  }, [name,toast,setName,onClose]);
+  }, [name,toast,setName,onClose,mutateDumps]);
 
   return (
     <>
