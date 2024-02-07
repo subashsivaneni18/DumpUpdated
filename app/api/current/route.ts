@@ -20,7 +20,9 @@ export async function GET(req:Request)
     })
 
     if(!currentUser)
-    {return null}
+    {
+      return NextResponse.json("No User")
+    }
 
     return NextResponse.json(currentUser)
 
