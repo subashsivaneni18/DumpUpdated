@@ -6,12 +6,13 @@ import { User } from '@prisma/client'
 import React from 'react'
 import useSWR from 'swr'
 
+export const dynamic = "force-dynamic";
+
 const AcessControllPage = ({params}:{params:{boxId:string}}) => {
 
     const {data:users} = useSWR<User[]>(`/api/getUsersofDump/${params.boxId}`,fetcher)
+    
 
-    console.log(users)
-   
     return(
         <div className='relative'>
             <Navbar/>

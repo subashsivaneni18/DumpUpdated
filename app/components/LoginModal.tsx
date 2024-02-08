@@ -46,7 +46,6 @@ const LoginModal:React.FC<LoginModalProps> = ({
       await signIn('credentials',{email:email,password:password})
       toast({
         title: "Logged In Sucessfully",
-        description: "We've created your account for you.",
         status: "success",
         duration: 9000,
         isClosable: true,

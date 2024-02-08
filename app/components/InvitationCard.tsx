@@ -30,8 +30,7 @@ const InvitationCard:React.FC<InvitationCardProps> = ({
     try {
       await axios.patch(`/api/joinBox/${BoxData?.id}`)
       toast({
-        title: "Logged In Sucessfully",
-        description: "We've created your account for you.",
+        title: "Added To The DumpBox",
         status: "success",
         duration: 9000,
         isClosable: true,

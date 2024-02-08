@@ -1,6 +1,6 @@
 import fetcher from '@/libs/fetcher';
 import {  Box, Button, Image, Text, useToast } from '@chakra-ui/react';
-import { DumpBox } from '@prisma/client';
+import { DumpBox, User } from '@prisma/client';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { useCallback } from 'react'
@@ -26,18 +26,31 @@ const DumpCard:React.FC<DumpCardProps> = ({
   const thumbnail = DumpData.ImageIds.findLast(x=>x) || ""
   
   const {data:imgUrl } = useSWR(`/api/getImage/${thumbnail}`,fetcher)
+  const {data:parentId} = useSWR(`/api/parent/${DumpData.id}`,fetcher)
+  const {data:currentUser} = useSWR<User>('/api/currentUser',fetcher)
 
   const handleDelete = useCallback(async(id:string)=>{
     try {
-      await axios.delete(`/api/DelDump/${id}`)
-       toast({
-         title: "Deleted Sucessfully",
-         description: "We've created your account for you.",
-         status: "success",
-         duration: 9000,
-         isClosable: true,
-       });
-       router.push('/Dashboard')
+      if(parentId===currentUser?.id as string)
+      {
+        await axios.delete(`/api/DelDump/${id}`);
+        toast({
+          title: "Deleted Sucessfully",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+        router.push("/Dashboard");
+      }
+      else{
+         toast({
+           title: "Only Admins Can Delete It",
+           status: "warning",
+           duration: 9000,
+           isClosable: true,
+         });
+         router.push("/Dashboard");
+      }
     } catch (error) {
       console.log(error)
        toast({
@@ -47,7 +60,7 @@ const DumpCard:React.FC<DumpCardProps> = ({
          isClosable: true,
        });
     }
-  },[router,toast])
+  },[router,toast,currentUser?.id,parentId])
 
 
 

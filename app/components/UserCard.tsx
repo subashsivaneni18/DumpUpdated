@@ -1,11 +1,11 @@
 "use client"
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Card,  CardBody, CardFooter,  Avatar, Badge, List, ListItem, useToast } from "@chakra-ui/react";
 import { User } from '@prisma/client';
 import axios from 'axios';
 import useSWR from 'swr';
 import fetcher from '@/libs/fetcher';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 
 
 interface UserCardProps{
@@ -22,6 +22,12 @@ const UserCard:React.FC<UserCardProps> = ({
   const router = useRouter()
 
   const {mutate:mutateBox} = useSWR(`/api/dumpbox/${boxId}`,fetcher)
+  const { data:currentUser } = useSWR<User>("/api/currentUser", fetcher);
+  const { data: users,mutate:mutateUsers } = useSWR<User[]>(
+    `/api/getUsersofDump/${boxId}`,
+    fetcher
+  );
+  const {data:AdminIds} = useSWR<string []>(`/api/AdminIds/${boxId}`,fetcher)
 
   const handleDelete = useCallback(async()=>{
     try {
@@ -33,7 +39,7 @@ const UserCard:React.FC<UserCardProps> = ({
         isClosable: true,
       });
       mutateBox()
-      router.refresh()
+      mutateUsers()
     } catch (error) {
       console.log(error)
       toast({
@@ -43,7 +49,7 @@ const UserCard:React.FC<UserCardProps> = ({
         isClosable: true,
       });
     }
-  },[toast,boxId,user?.id,mutateBox,router])
+  },[toast,boxId,user?.id,mutateBox,mutateUsers])
 
 
   const handleAcessChange = useCallback(async()=>{
@@ -55,12 +61,24 @@ const UserCard:React.FC<UserCardProps> = ({
           duration: 9000,
           isClosable: true,
         });
+        mutateBox()
+        mutateUsers()
+        router.refresh()
       } catch (error) {
         console.log(error)
       }
-  },[toast,boxId,user?.id])
+  },[toast,boxId,user?.id,mutateBox,mutateUsers,router])
 
   const {data:parentId} = useSWR(`/api/parent/${boxId}`,fetcher)
+
+
+  
+  useEffect(()=>{
+     if(!AdminIds?.includes(currentUser?.id as string))
+     {
+      router.push('/')
+     }
+  },[])
 
   
 
@@ -101,12 +119,12 @@ const UserCard:React.FC<UserCardProps> = ({
           <div></div>
         ) : (
           <div>
-            <p className="cursor-pointer" onClick={() => handleDelete()}>
+           {!(currentUser?.id===user.id) && <p className="cursor-pointer" onClick={() => handleDelete()}>
               Delete User
-            </p>
-            <p className="cursor-pointer" onClick={() => handleAcessChange()}>
+            </p>}
+            { <p className="cursor-pointer" onClick={() => handleAcessChange()}>
               Change Acess
-            </p>
+            </p>}
           </div>
         )}
       </Card>
