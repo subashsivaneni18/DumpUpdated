@@ -3,6 +3,8 @@ import Navbar from '@/app/components/Navbar'
 import UserCard from '@/app/components/UserCard'
 import fetcher from '@/libs/fetcher'
 import { User } from '@prisma/client'
+import { useSession } from 'next-auth/react'
+import { redirect } from 'next/navigation'
 import React from 'react'
 import useSWR from 'swr'
 
@@ -11,6 +13,13 @@ export const dynamic = "force-dynamic";
 const AcessControllPage = ({params}:{params:{boxId:string}}) => {
 
     const {data:users} = useSWR<User[]>(`/api/getUsersofDump/${params.boxId}`,fetcher)
+
+    const session = useSession()
+
+    if(!session)
+    {
+        return redirect('/')
+    }
     
 
     return(
