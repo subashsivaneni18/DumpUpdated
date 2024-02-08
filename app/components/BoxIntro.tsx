@@ -50,15 +50,11 @@ const BoxIntro:React.FC<BoxIntroProps> = ({
           </div>
         </Box>
 
-        {/* <Box>
-          <Button colorScheme="red">Delete</Button>
-        </Box> */}
+       
       </div>
 
 
-      {/* <div className='p-4 pb-10'>
-        Items Selected
-      </div> */}
+     
     </div>
   );
 }

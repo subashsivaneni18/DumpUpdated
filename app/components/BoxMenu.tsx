@@ -41,6 +41,8 @@ const BoxMenu:React.FC<BoxMenuProps> = ({
     fetcher
   );
 
+  const {data:parentId} = useSWR(`/api/parent/${boxId}`,fetcher)
+
   const handleInviteLink = () =>{
     const url = getURL("")+"invite/"+boxId
     navigator.clipboard.writeText(url).then(()=>{
@@ -101,9 +103,9 @@ const BoxMenu:React.FC<BoxMenuProps> = ({
             <MenuItem onClick={() => handleInviteLink()}>
               Invite A Member
             </MenuItem>
-            <MenuItem onClick={() => router.push(`/acessControll/${boxId}`)}>
+            {(currentUser.id===parentId) &&<MenuItem onClick={() => router.push(`/acessControll/${boxId}`)}>
               Access Controll
-            </MenuItem>
+            </MenuItem>}
           </MenuList>
         </Menu>
       )}

@@ -73,12 +73,7 @@ const UserCard:React.FC<UserCardProps> = ({
 
 
   
-  useEffect(()=>{
-     if(!AdminIds?.includes(currentUser?.id as string))
-     {
-      router.push('/')
-     }
-  },[])
+ 
 
   
 
